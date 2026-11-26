@@ -4,11 +4,13 @@
 
 <div align="center">
 
-# MGM-Omni: An Open-source Omni Chatbot</span>
+# MGM-Omni: Scaling Omni LLMs to Personalized Long-Horizon Speech</span>
 
-[![Github](https://img.shields.io/badge/Github-000000?style=for-the-badge&logo=github&logoColor=000&logoColor=white)](https://github.com/dvlab-research/MGM-Omni)
+[![Paper](https://img.shields.io/badge/Paper-000000?style=for-the-badge&logo=arxiv&logoColor=000&logoColor=white)](https://arxiv.org/abs/2509.25131)
 [![Blog](https://img.shields.io/badge/Blog-000000.svg?style=for-the-badge&logo=notion&logoColor=white)](https://mgm-omni.notion.site/MGM-Omni-An-Open-source-Omni-Chatbot-2395728e0b0180149ac9f24683fc9907?source=copy_link)
+[![Discussion](https://img.shields.io/badge/Discussion-000000?style=for-the-badge&logo=huggingface&logoColor=white)](https://huggingface.co/papers/2509.25131)
 [![Models](https://img.shields.io/badge/Models-000000?style=for-the-badge&logo=huggingface&logoColor=white)](https://huggingface.co/collections/wcy1122/mgm-omni-6896075e97317a88825032e1)
+[![Benchmark](https://img.shields.io/badge/Benchmark-000000?style=for-the-badge&logo=huggingface&logoColor=white)](https://huggingface.co/datasets/wcy1122/Long-TTS-Eval)
 [![Demo](https://img.shields.io/badge/Spaces-000000?style=for-the-badge&logo=huggingface&logoColor=white)](https://huggingface.co/spaces/wcy1122/MGM-Omni)
 
 </div>
@@ -30,11 +32,16 @@ We present MGM-Omni, an omni-chatbot capable of processing text, image, video, a
 
 
 ## News
+- [6/20] 🔥 MGM-Omni is accepted in ECCV 2026.
+- [9/30] 🔥 The [technical report](https://arxiv.org/abs/2509.25131) for MGM-Omni is available at arxiv.
+- [9/29] 🔥 We release [Long-TTS-Eval](https://huggingface.co/datasets/wcy1122/Long-TTS-Eval), a benchmark for evaluating long-form and complex TTS. Please refer [here](https://github.com/dvlab-research/MGM-Omni/blob/main/mgm/eval/long_tts_eval/long_tts_eval.md) for more evaluation detail.
+- [9/27] 🔥 We release [MGM-Omni-TTS-2B-0927](https://huggingface.co/wcy1122/MGM-Omni-TTS-2B-0927), a stronger SpeechLM with more robust speech output.
 - [8/18] 🔥 MGM-Omni is coming! We release the [blog post](https://mgm-omni.notion.site/MGM-Omni-An-Open-source-Omni-Chatbot-2395728e0b0180149ac9f24683fc9907?source=copy_link), [demo](https://huggingface.co/spaces/wcy1122/MGM-Omni), [model](https://huggingface.co/collections/wcy1122/mgm-omni-6896075e97317a88825032e1) and [code](https://github.com/dvlab-research/MGM-Omni). More code and data will be released later!
 
 
 ## TODO
-- [ ] Arxiv preprint
+- [x] Arxiv preprint
+- [x] Long TTS benchmark
 - [ ] Training and Fine-tuning code
 - [ ] Training data
 
@@ -66,7 +73,7 @@ Generate audio that sounds similar as the provided reference audio.
 
 ```bash
 python -m mgm.serve.cli_tts \
---model wcy1122/MGM-Omni-TTS-2B \
+--model wcy1122/MGM-Omni-TTS-2B-0927 \
 --ref-audio assets/ref_audio/Man_EN.wav
 ```
 
@@ -80,7 +87,7 @@ Add `--ref-audio-text` for a more accurate reference audio transcript. Otherwise
 ```bash
 python -m mgm.serve.cli \
 --model wcy1122/MGM-Omni-7B \
---speechlm wcy1122/MGM-Omni-TTS-2B
+--speechlm wcy1122/MGM-Omni-TTS-2B-0927
 ```
 
 Add `--ref-audio` and `--ref-audio-text` (optional) if you want MGM-Omni to response with a specific voice.
@@ -90,7 +97,7 @@ Add `--ref-audio` and `--ref-audio-text` (optional) if you want MGM-Omni to resp
 ```bash
 python -m mgm.serve.cli \
 --model wcy1122/MGM-Omni-7B \
---speechlm wcy1122/MGM-Omni-TTS-2B \
+--speechlm wcy1122/MGM-Omni-TTS-2B-0927 \
 --image-file assets/examples/ronaldo.jpg
 ```
 
@@ -101,7 +108,7 @@ To explore more modality, use `--video-file` for video input and `--audio-file` 
 ```bash
 python -m mgm.serve.cli \
 --model wcy1122/MGM-Omni-7B \
---speechlm wcy1122/MGM-Omni-TTS-2B \
+--speechlm wcy1122/MGM-Omni-TTS-2B-0927 \
 --image-file assets/examples/ronaldo.jpg \
 --audio-file assets/examples/instruct.wav
 ```
@@ -113,10 +120,13 @@ For Multi Modality input, use `--image-file`, `--video-file` and `--audio-file` 
 ```bash
 python -m mgm.serve.web_demo \
 --model wcy1122/MGM-Omni-7B \
---speechlm wcy1122/MGM-Omni-TTS-2B
+--speechlm wcy1122/MGM-Omni-TTS-2B-0927
 ```
 
 Use this command to lunch a gradio demo locally.
+
+### Long-TTS-Eval Benchmark
+Please refer [here](https://github.com/dvlab-research/MGM-Omni/blob/main/mgm/eval/long_tts_eval/long_tts_eval.md) for the output format and evaluation script of **Long-TTS-Eval**.
 
 ## Architecture
 
@@ -167,12 +177,23 @@ This table presents evaluation results on AIR-Bench Chat (speech, sound, music, 
 | Qwen2.5-Omni-7B | 2025-03 | 2B         | 1.42     | 0.754     | 2.33     | 0.641     |
 | MOSS-TTSD-v0    | 2025-06 | 2B         | 2.18     | 0.594     | 2.46     | 0.476     |
 | HiggsAudio-v2   | 2025-07 | 6B         | 1.66     | 0.743     | 2.44     | 0.677     |
-| **MGM-Omni**    | 2025-08 | 0.6B       | 1.49     | 0.749     | 2.54     | 0.670     |
-| **MGM-Omni**    | 2025-08 | 2B         | 1.38     | 0.753     | 2.28     | 0.682     |
-| **MGM-Omni**    | 2025-08 | 4B         | **1.34** | **0.756** | **2.22** | **0.684** |
+| **MGM-Omni**    | 2025-08 | 0.6B       | 1.42     | 0.750     | 2.48     | 0.670     |
+| **MGM-Omni**    | 2025-08 | 2B         | 1.28     | 0.755     | 2.28     | 0.684     |
+| **MGM-Omni**    | 2025-08 | 4B         | **1.18** | **0.758** | **2.22** | **0.686** |
 
 This table presents evaluation results on speech generation on seed-tts-eval.
-For Qwen2.5-Omni, model size refers to the size of the talker.
+For Qwen-Omni series, model size refers to the size of the talker.
+
+| Model             | Date    | Model Size | EN WER↓  | ZH CER↓  | EN-hard WER↓ | ZH-hard WER↓ |
+|:------------------|:--------|:-----------|:---------|:---------|:-------------|:-------------|
+| CosyVoice2(chunk) | 2024-12 | 0.5B       | 14.80    | **5.27** | 42.48        | 32.76        |
+| MOSS-TTSD-v0.5    | 2025-06 | 6B         | 8.69     | 6.82     | 62.61        | 62.97        |
+| HiggsAudio-v2     | 2025-07 | 6B         | 27.09    | 31.39    | 98.61        | 98.85        |
+| Qwen3-Omni        | 2025-09 | 5B         | 26.23    | 19.17    | 72.63        | 70.16        |
+| **MGM-Omni**      | 2025-08 | 2B         | **4.98** | 5.58     | **26.26**    | **23.58**    |
+
+This table presents evaluation results on long-form and hard speech generation on long-tts-eval.
+For Qwen-Omni series, model size refers to the size of the talker.
 
 ### Demo
 We provide some examples in our [blog post](https://mgm-omni.notion.site/MGM-Omni-An-Open-source-Omni-Chatbot-2395728e0b0180149ac9f24683fc9907?source=copy_link). If you want to explore more, welcome to try our [web demo](https://huggingface.co/spaces/wcy1122/MGM-Omni)!
@@ -181,12 +202,13 @@ We provide some examples in our [blog post](https://mgm-omni.notion.site/MGM-Omn
 ## Citation
 If you find this repo useful for your research, we would appreciate it if you could cite our work 😊:
 ```
-@misc{wang2025mgmomni,
-  title={MGM-Omni: An Open-source Omni Chatbot},
-  author={Wang, Chengyao and Zhong, Zhisheng and Peng, Bohao and Yang, Senqiao and Liu, Yuqi and Yu, Bei and Jia, Jiaya},
+@article{wang2025mgmomni,
+  title={MGM-Omni: Scaling Omni LLMs to Personalized Long-Horizon Speech},
+  author={Wang, Chengyao and Zhong, Zhisheng and Peng, Bohao and Yang, Senqiao and Liu, Yuqi and Gui, Haokun and Xia, Bin and Li, Jingyao and Yu, Bei and Jia, Jiaya},
+  journal={arXiv preprint arXiv:2509.25131},
   year={2025},
-  howpublished={\url{https://mgm-omni.notion.site}},
-  note={Notion Blog}
+  doi=10.48550/arXiv.2509.25131},
+  url={https://arxiv.org/abs/2509.25131}
 }
 
 @inproceedings{zhong2025lyra,
